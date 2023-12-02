@@ -1,0 +1,54 @@
+version: '3.8'
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    container_name: es01
+    environment :
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ./elasticsearch/es01:/var/lib/elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - elk-network
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    container_name: es02
+    environment :
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ./elasticsearch/es02:/var/lib/elasticsearch
+    ports:
+      - 9201:9200
+      - 9301:9300
+    networks:
+      - elk-network
+  es03:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    container_name: es03
+    environment :
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ./elasticsearch/es03:/var/lib/elasticsearch
+    ports:
+      - 9202:9200
+      - 9302:9300
+    networks:
+      - elk-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.1
+    container_name: kibana
+    volumes:
+      - ./kibana:/var/lib/kibana
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://es01:9200
+      ELASTICSEARCH_HOSTS: http://es01:9200
+    networks:
+      - elk-network
+
+networks:
+  elk-network:
